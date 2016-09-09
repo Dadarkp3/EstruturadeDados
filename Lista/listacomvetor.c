@@ -73,7 +73,7 @@ _Bool consulta (lista l, int x){
 	int i = 0;
 	if(l.nElems == 0) return false;
 	for(i = 0; i < l.nElems && l.conteudo[i] != x; i++);
-	if (i==l.nelems)
+	if (i==l.nElems)
 		return false;
 	return true;
 
