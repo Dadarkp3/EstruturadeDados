@@ -14,7 +14,7 @@ typedef struct 	filaInt{
 }filaInt;
 
 void inicializar(filaInt *f);
-_Bool consulta(filaInt, int x);
+_Bool consulta(filaInt f, int x);
 _Bool inserir(filaInt *f, int x);
 void retira(filaInt *f);
 void imprimir (filaInt f);
