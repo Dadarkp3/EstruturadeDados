@@ -5,22 +5,22 @@ Daiane Mascarenhas Lauro da Silva*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#define tamanhodaFila 5
+#define TAMFILA 5
 
 typedef struct 	filaInt{
-	int conteudo[tamanhodaFila];
+	int conteudo[TAMFILA];
 	int inicio;
 	int nElems;	
 }filaInt;
 
 void inicializar(filaInt *f);
-_Bool consulta(filaInt f, int x);
+_Bool consulta(filaInt *f, int x);
 _Bool inserir(filaInt *f, int x);
-void retira(filaInt *f);
-void imprimir (filaInt f);
+void retira(filaInt *f, int *x);
+void imprimir (filaInt *f);
 int main()
 {
-	int entrada = 0, n;
+	int entrada = 0, n, x;
 	filaInt f;
 	inicializar(&f);
 	do{
@@ -38,7 +38,7 @@ int main()
         		case 1:
 				printf("\n\nDigite o número que deseja procurar na Fila: ");
 				scanf("%d", &n);
-                		if(consulta(f,n)) printf("\nO número está contido na Fila\n\n");
+                		if(consulta(&f,n)) printf("\nO número está contido na Fila\n\n");
 				else printf("\nO número não está contido na Fila\n\n");
 				break;
         		case 2:
@@ -48,10 +48,11 @@ int main()
 				else printf("\nO número não foi inserido na Fila\n\n"); 	
         			break;
         		case 3:
-				retira(&f);
+				retira(&f, &x);
+				printf("O primeiro elemento da lista era o: %d\n", x);
         			break;
         		case 4:
-        			imprimir(f);
+        			imprimir(&f);
         			break;
         		case 0: printf("\nAdeus!\n\n");
 				break;				
@@ -68,41 +69,34 @@ void inicializar(filaInt *f){
 	f->inicio = 0;
 
 }
-_Bool consulta(filaInt f, int x)
+_Bool consulta(filaInt *f, int x)
 {
 	int i;
-	if(f.nElems == 0) return false;
-	for(i = f.inicio; i < f.nElems && f.conteudo[i] != x; i++);
-	return (f.conteudo[i] == x);
+	if(f->nElems == 0) return false;
+	for(i = 0; i < f->nElems && f->conteudo[(f->inicio+i)%TAMFILA] != x; i++);
+	return (f->conteudo[i] == x);
 }
 
 _Bool inserir(filaInt *f, int x){
-	if(f->nElems == tamanhodaFila)
+	if(f->nElems == TAMFILA)
 		return false;
-	f->conteudo[f->nElems] = x;
+	f->conteudo[(f->inicio+f->nElems)%TAMFILA] = x;
 	f->nElems++;
 	return true;
 }
 
-void retira(filaInt *f){
+void retira(filaInt *f, int *x){
 	if(f->nElems > 0){
-		if(f->nElems == 1)
-		{
-			f->inicio = 0;
-			f->nElems--;
-		}	
-		else{
-			f->inicio++;
-			f->nElems--;
-		
-		}
+		*x = f->conteudo[f->inicio];
+		f->inicio = (f->inicio+1)%TAMFILA;
+		f->nElems--;
 	}
 }
 
-void imprimir (filaInt f){
+void imprimir (filaInt *f){
 	int i;
 	printf("Fila: ");
-	for(i=f.inicio; i < f.nElems; i++)
-		printf("%d ", f.conteudo[i]);
+	for(i=0; i < f->nElems; i++)
+		printf("%d ", f->conteudo[(f->inicio+i)%TAMFILA]);
 	printf("\n");
 }
